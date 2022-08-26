@@ -3,7 +3,14 @@ const test = 'TESTING';
 </script>
 
 <template>
-  <header class="bg-white py-4 shadow-lg">
-    {{ test }}
-  </header>
+  <div>
+    <header class="bg-white py-4 shadow-lg">
+      <NuxtLink to="/search">Search</NuxtLink>
+    </header>
+    <main>
+      <p>
+        {{ test }}
+      </p>
+    </main>
+  </div>
 </template>
