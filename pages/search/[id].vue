@@ -1,15 +1,36 @@
 <script setup lang="ts">
+import { onMounted, ref } from 'vue';
+const config = useRuntimeConfig();
 const route = useRoute();
-console.log('route-params-id', route.params.id);
+const episodes = ref([]);
+
+onMounted(async () => {
+  const res = await fetch(
+    `${config.apiBase}/shows/${route.params.id}?embed=episodes`
+  );
+  const data = await res.json();
+  // console.log('data', data);
+  episodes.value = data._embedded.episodes;
+});
 </script>
 
 <template>
   <div>
-    <h1>
-      {{ $route.params.id }}
-    </h1>
-    <!-- Because  :  const route = useRoute(); -->
-    <!-- still work in bellow method, no $ behind -->
-    {{ route.params.id }}
+    <header>
+      <nuxt-link to="/">
+        <button>back</button>
+      </nuxt-link>
+    </header>
+    <main>
+      <h2>Show ID: {{ $route.params.id }}</h2>
+      <h3>List of Episodes</h3>
+      <div class="shows">
+        <div class="show" v-for="episode in episodes" :key="episode.id">
+          <div>{{ episode.name }}</div>
+          <div>Season:{{ episode.season }} Episode: {{ episode.number }}</div>
+          <img :src="episode.image?.medium" alt="" />
+        </div>
+      </div>
+    </main>
   </div>
 </template>
