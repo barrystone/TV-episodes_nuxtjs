@@ -1,5 +1,7 @@
 <script setup lang="ts">
-const test = 'TESTING';
+const config = useRuntimeConfig();
+
+console.log('TEST', config.apiBase);
 </script>
 
 <template>
@@ -8,9 +10,7 @@ const test = 'TESTING';
       <NuxtLink to="/search">Search</NuxtLink>
     </header>
     <main>
-      <p>
-        {{ test }}
-      </p>
+      <p></p>
     </main>
   </div>
 </template>
