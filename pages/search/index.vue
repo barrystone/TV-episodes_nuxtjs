@@ -1,8 +1,9 @@
 <template>
+  <Header />
   <div class="h-80 w-screen flex flex-col items-center justify-center">
-    <h1 class="pb-10 text-2xl">Show</h1>
+    <h1 class="pb-10 text-2xl">Search</h1>
 
-    <NuxtLink
+    <nuxt-link
       to="/"
       class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 cursor-pointer"
       >Back to Home
@@ -20,6 +21,6 @@
           clip-rule="evenodd"
         ></path>
       </svg>
-    </NuxtLink>
+    </nuxt-link>
   </div>
 </template>
