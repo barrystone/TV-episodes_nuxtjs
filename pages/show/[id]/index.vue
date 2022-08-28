@@ -14,9 +14,13 @@ onMounted(async () => {
   const data = await res.json();
   showInfo.value = data;
   episodes.value = data._embedded.episodes;
-  console.log('showInfo', showInfo);
-  console.log('episodes', episodes);
+  // console.log('showInfo', showInfo);
+  // console.log('episodes', episodes);
 });
+
+const storeEpisodeIdInfo = (id) => {
+  localStorage.setItem('Tv-episodes_latestEpisodeId', id);
+};
 </script>
 
 <template>
@@ -68,7 +72,8 @@ onMounted(async () => {
               :key="episode.id"
             >
               <nuxt-link
-                :to="'/show/' + route.params.id + '/episode/' + episode.id"
+                :to="'/show/' + route.params.id + '/episode/'"
+                v-on:click="storeEpisodeIdInfo(episode.id)"
               >
                 <!-- <h4>{{ episode.name }}</h4> -->
                 <!-- <div> -->

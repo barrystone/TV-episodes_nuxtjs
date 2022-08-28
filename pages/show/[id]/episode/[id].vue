@@ -5,11 +5,10 @@ const route = useRoute();
 const router = useRouter();
 
 const episodes = ref([]);
-// const currentEpisodeIndex = ref(0);
 
 let slideIndex = 1;
 const slides = document.getElementsByClassName('slide');
-const dots = document.getElementsByClassName('dot');
+// const dots = document.getElementsByClassName('dot');
 
 onMounted(async () => {
   const res = await fetch(
@@ -17,76 +16,36 @@ onMounted(async () => {
   );
   const data = await res.json();
   episodes.value = data._embedded.episodes;
-
-  slideIndex =
-    episodes.value
-      .map((e, index) => e.id === Number(route.params.id) && index)
-      .filter((e) => typeof e === 'number')[0] + 1;
-  //   currentEpisodeIndex.value = episodes.value
+  // slideIndex =
+  //   episodes.value
   //     .map((e, index) => e.id === Number(route.params.id) && index)
-  //     .filter((e) => e)[0];
-  //   console.log(
-  //     'eee',
-  //     episodes.value
-  //       .map((e, index) => e.id === Number(route.params.id) && index)
-  //       .filter((e) => typeof e === 'number')[0]
-  //   );
-  //   console.log('mounted currentEpisodeIndex.value', currentEpisodeIndex.value);
+  //     .filter((e) => typeof e === 'number')[0] + 1;
 
-  // set the default active slide to the first one
-  //   showSlide(slideIndex);
+  if (episodes.value.find((e) => e.id === Number(route.params.id))) {
+    localStorage.setItem(
+      'Tv-episodes_latestEpisodeId',
+      route.params.id.toString()
+    );
+  } else {
+    alert('Page not Found');
+  }
+
+  console.log('route.params.id', route.params.id);
 });
-
-// watchEffect(() => {
-//   currentEpisodeIndex.value = episodes.value
-//     .map((e, index) => e.id === Number(route.params.id) && index)
-//     .filter((e) => typeof e === 'number')[0];
-// });
 
 // change slide with the prev/next button
 const moveSlide = (moveStep) => {
-  const ii = episodes.value
-    .map((e, index) => e.id === Number(route.params.id) && index)
-    .filter((e) => typeof e === 'number')[0];
+  // showSlide((slideIndex += moveStep));
 
-  console.log('before move', slideIndex);
-
-  //     let movedIndex = ii + moveStep;
-  //     if (movedIndex < 0) {
-  //       movedIndex = episodes.value.length + movedIndex;
-  //     } else if (movedIndex >= episodes.value.length) {
-  //       movedIndex = episodes.value.length - movedIndex;
-  //     }
-
-  //   console.log('before move', ii, moveStep, movedIndex, route.params.id);
-
-  showSlide((slideIndex += moveStep));
-  //   showSlide(( += moveStep));
-  //   console.log('history', history.state);
-  //   console.log('route.params.id', route.params.id);
-  // console.log('dd', episodes.value[0].id);
-
-  //   router.push({
-  //     path: `/show/${route.path.split('/')[2]}/episode/${
-  //       episodes.value[movedIndex].id
-  //     }`,
-  //     force: true
-  //   });
-
-  //   location.href = `/show/${route.path.split('/')[2]}/episode/${
-  //     episodes.value[movedIndex].id
-  //   }`;
-
-  // ${encodeURIComponent(episodes.value[movedIndex].id)}
-
-  //   history.pushState(
-  //     {},
-  //     null,
-  //     `/show/${route.path.split('/')[2]}/episode/
-  //     `
-  //   );
-  //   console.log('after move', ii, moveStep, movedIndex, route.params.id);
-  console.log('after move', slideIndex);
+  // router.push({
+  //   path: `/show/${route.path.split('/')[2]}/episode/`
+  //   // force: true
+  // });
+  localStorage.setItem(
+    'Tv-episodes_latestEpisodeId',
+    episodes.value[(slideIndex += moveStep) - 1].id
+  );
+  location.href = `/show/${route.path.split('/')[2]}/episode/`;
 };
 // change slide with the dots
 const currentSlide = (n) => {
@@ -114,9 +73,9 @@ const showSlide = (n) => {
   // show the active slide
   slides[slideIndex - 1].classList.remove('hidden');
 
-  // highlight the active dot
-  //   dots[slideIndex - 1].classList.remove('bg-green-600');
-  //   dots[slideIndex - 1].classList.add('bg-yellow-500');
+  //   highlight the active dot
+  // dots[slideIndex - 1].classList.remove('bg-green-600');
+  // dots[slideIndex - 1].classList.add('bg-yellow-500');
 };
 </script>
 
@@ -130,7 +89,7 @@ const showSlide = (n) => {
       :class="
         episode.id === Number($route.params.id)
           ? 'slide relative '
-          : 'slide relative hidden '
+          : 'slide relative '
       "
       v-for="episode in episodes"
       :key="episode.id"
@@ -143,17 +102,12 @@ const showSlide = (n) => {
         <br />
       </div>
     </div>
-
-    <!-- The previous button -->
     <a
       class="absolute left-0 top-1/2 p-4 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white hover:text-amber-500 cursor-pointer select-none"
       v-on:click="moveSlide(-1)"
     >
       ❮
     </a>
-
-    <!-- The next button -->
-
     <a
       class="absolute right-0 top-1/2 p-4 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white hover:text-amber-500 cursor-pointer select-none"
       v-on:click="moveSlide(1)"
@@ -169,11 +123,11 @@ const showSlide = (n) => {
       v-on:click="currentSlide(1)"
     ></div>
     <div
-      class="dot w-4 h-4 rounded-full cursor-pointer"
+      class="dot w-4 h-4 rounded-full cursor-pointer bg-red-300"
       v-on:click="currentSlide(2)"
     ></div>
     <div
-      class="dot w-4 h-4 rounded-full cursor-pointer"
+      class="dot w-4 h-4 rounded-full cursor-pointer bg-red-100"
       v-on:click="currentSlide(3)"
     ></div>
   </div> -->
