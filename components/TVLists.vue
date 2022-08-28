@@ -13,6 +13,8 @@ export default {
       const res = await fetch(`${config.apiBase}/search/shows?q=${text}`);
       const data = await res.json();
       this.shows = data;
+      console.log('this.shows', this.shows);
+      // console.log('data', data);
     }
   },
   mounted() {
@@ -63,7 +65,11 @@ export default {
             class="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8"
           >
             <!-- <div class="shows"> -->
-            <div class="show" v-for="show in shows" :key="show.show.id">
+            <div
+              class="border-slate-600 border-2 rounded-xl"
+              v-for="show in shows"
+              :key="show.show.id"
+            >
               <nuxt-link class="group" :to="'/show/' + show.show.id">
                 <div
                   class="w-full aspect-w-1 aspect-h-1 bg-gray-200 rounded-lg overflow-hidden xl:aspect-w-7 xl:aspect-h-8"
@@ -74,10 +80,36 @@ export default {
                     class="w-full h-full object-center object-cover group-hover:opacity-75"
                   />
                 </div>
-                <h3 class="mt-4 text-sm text-gray-700">
-                  {{ show.show.name }}
-                </h3>
-                <p class="mt-1 text-lg font-medium text-gray-900">rating</p>
+                <div class="ml-4">
+                  <h3 class="mt-4 text-xl text-gray-700">
+                    {{ show.show.name }}
+                  </h3>
+                  <div class="mt-1 text-sm font-medium text-gray-900 pb-2">
+                    <div
+                      class="flex items-center"
+                      v-if="show.show.rating.average"
+                    >
+                      <span> Rating: </span>
+
+                      <div
+                        class="mx-4 w-2/4 h-3 bg-gray-200 rounded dark:bg-gray-700 flex items-center"
+                      >
+                        <div
+                          class="h-2 bg-yellow-400 rounded"
+                          :style="
+                            'width:' + show.show.rating.average * 10 + '%'
+                          "
+                        ></div>
+                      </div>
+                      <span
+                        class="font-medium text-black dark:text-black text-lg"
+                      >
+                        {{ show.show.rating.average }}
+                      </span>
+                    </div>
+                    <div v-if="!show.show.rating.average">Not rated yet</div>
+                  </div>
+                </div>
               </nuxt-link>
               <!-- </div> -->
             </div>
