@@ -1,13 +1,17 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 const config = useRuntimeConfig();
+// const router = useRouter();
 const route = useRoute();
 const episodes = ref([]);
+const showInfo = ref({
+  name: ''
+});
 let latestEpisodeId = localStorage.getItem('Tv-episodes_latestEpisodeId');
 
 let slideIndex = 1;
 const slides = document.getElementsByClassName('slide');
-// const dots = document.getElementsByClassName('dot');
+const dots = document.getElementsByClassName('dot');
 
 onMounted(async () => {
   const res = await fetch(
@@ -15,10 +19,10 @@ onMounted(async () => {
   );
 
   const data = await res.json();
+  showInfo.value = data;
   episodes.value = data._embedded.episodes;
 
   latestEpisodeId = localStorage.getItem('Tv-episodes_latestEpisodeId');
-  console.log('latestEpisodeId', latestEpisodeId);
   slideIndex =
     episodes.value
       .map((e, index) => e.id === Number(latestEpisodeId) && index)
@@ -32,6 +36,7 @@ const moveSlide = (moveStep) => {
     'Tv-episodes_latestEpisodeId',
     episodes.value[slideIndex - 1].id
   );
+
   latestEpisodeId = localStorage.getItem('Tv-episodes_latestEpisodeId');
 };
 // change slide with the dots
@@ -52,23 +57,46 @@ const showSlide = (n) => {
     slides[i].classList.add('hidden');
   }
   // remove active status from all dots
-  //   for (i = 0; i < dots.length; i++) {
-  //     dots[i].classList.remove('bg-yellow-500');
-  //     dots[i].classList.add('bg-green-600');
-  //   }
+  for (i = 0; i < dots.length; i++) {
+    dots[i].classList.remove('bg-yellow-500');
+    dots[i].classList.add('bg-green-600');
+  }
 
   // show the active slide
   slides[slideIndex - 1].classList.remove('hidden');
 
   //   highlight the active dot
-  // dots[slideIndex - 1].classList.remove('bg-green-600');
-  // dots[slideIndex - 1].classList.add('bg-yellow-500');
+  dots[slideIndex - 1].classList.remove('bg-green-600');
+  dots[slideIndex - 1].classList.add('bg-yellow-500');
 };
 </script>
 
 <template>
-  <h1 class="my-4 text-center text-4xl">KindaCode.com</h1>
-  <h2 class="mb-10 text-center text-xl">Carousel Example</h2>
+  <header class="relative flex items-center bg-white py-4 shadow-lg">
+    <a
+      :href="'/show/' + route.path.split('/')[2]"
+      class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 cursor-pointer h-10 ml-5"
+      >Back to show
+      <svg
+        aria-hidden="true"
+        class="ml-2 -mr-1 w-5 h-5"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+          clip-rule="evenodd"
+        ></path>
+      </svg>
+    </a>
+    <h1
+      class="absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 text-xl"
+    >
+      {{ showInfo.name }}
+    </h1>
+  </header>
 
   <!-- Implement the carousel -->
   <div class="relative w-[600px] mx-auto">
@@ -104,18 +132,20 @@ const showSlide = (n) => {
   <br />
 
   <!-- The dots -->
-  <!-- <div class="flex justify-center items-center space-x-5">
+  <div class="flex justify-center items-center space-x-5">
     <div
-      class="dot w-4 h-4 rounded-full cursor-pointer"
-      v-on:click="currentSlide(1)"
+      class="dot w-4 h-4 rounded-full cursor-pointer bg-red-200"
+      v-for="(episode, index) in episodes"
+      :key="episode.id"
+      v-on:click="currentSlide(index)"
     ></div>
-    <div
+    <!-- <div
       class="dot w-4 h-4 rounded-full cursor-pointer bg-red-300"
       v-on:click="currentSlide(2)"
     ></div>
     <div
       class="dot w-4 h-4 rounded-full cursor-pointer bg-red-100"
       v-on:click="currentSlide(3)"
-    ></div>
-  </div> -->
+    ></div> -->
+  </div>
 </template>
