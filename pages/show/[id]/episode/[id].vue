@@ -2,9 +2,12 @@
 import { onMounted, ref } from 'vue';
 const config = useRuntimeConfig();
 const route = useRoute();
-const router = useRouter();
 
 const episodes = ref([]);
+const episode = ref({
+  id: '',
+  image: { medium: '' }
+});
 
 let slideIndex = 1;
 const slides = document.getElementsByClassName('slide');
@@ -16,31 +19,22 @@ onMounted(async () => {
   );
   const data = await res.json();
   episodes.value = data._embedded.episodes;
-  // slideIndex =
-  //   episodes.value
-  //     .map((e, index) => e.id === Number(route.params.id) && index)
-  //     .filter((e) => typeof e === 'number')[0] + 1;
-
-  if (episodes.value.find((e) => e.id === Number(route.params.id))) {
-    localStorage.setItem(
-      'Tv-episodes_latestEpisodeId',
-      route.params.id.toString()
-    );
-  } else {
-    alert('Page not Found');
-  }
-
-  console.log('route.params.id', route.params.id);
+  episode.value = episodes.value.find((e) => e.id === Number(route.params.id));
+  slideIndex = episodes.value.indexOf(episode.value) + 1;
 });
+
+if (episode.value) {
+  localStorage.setItem(
+    'Tv-episodes_latestEpisodeId',
+    route.params.id.toString()
+  );
+} else {
+  alert('Episode not Found');
+  location.href = `/show/${route.path.split('/')[2]}/episode/`;
+}
 
 // change slide with the prev/next button
 const moveSlide = (moveStep) => {
-  // showSlide((slideIndex += moveStep));
-
-  // router.push({
-  //   path: `/show/${route.path.split('/')[2]}/episode/`
-  //   // force: true
-  // });
   localStorage.setItem(
     'Tv-episodes_latestEpisodeId',
     episodes.value[(slideIndex += moveStep) - 1].id
@@ -85,7 +79,7 @@ const showSlide = (n) => {
 
   <!-- Implement the carousel -->
   <div class="relative w-[600px] mx-auto">
-    <div
+    <!-- <div
       :class="
         episode.id === Number($route.params.id)
           ? 'slide relative '
@@ -93,15 +87,15 @@ const showSlide = (n) => {
       "
       v-for="episode in episodes"
       :key="episode.id"
+    > -->
+    <img class="w-full h-[300px] object-cover" :src="episode.image?.medium" />
+    <div
+      class="absolute bottom-0 w-full px-5 py-3 bg-black/40 text-center text-white"
     >
-      <img class="w-full h-[300px] object-cover" :src="episode.image?.medium" />
-      <div
-        class="absolute bottom-0 w-full px-5 py-3 bg-black/40 text-center text-white"
-      >
-        {{ episode.id }}
-        <br />
-      </div>
+      {{ episode.id }}
+      <br />
     </div>
+    <!-- </div> -->
     <a
       class="absolute left-0 top-1/2 p-4 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white hover:text-amber-500 cursor-pointer select-none"
       v-on:click="moveSlide(-1)"
