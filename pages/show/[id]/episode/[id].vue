@@ -18,6 +18,10 @@ onMounted(async () => {
   const data = await res.json();
   episodes.value = data._embedded.episodes;
 
+  slideIndex =
+    episodes.value
+      .map((e, index) => e.id === Number(route.params.id) && index)
+      .filter((e) => typeof e === 'number')[0] + 1;
   //   currentEpisodeIndex.value = episodes.value
   //     .map((e, index) => e.id === Number(route.params.id) && index)
   //     .filter((e) => e)[0];
@@ -30,7 +34,7 @@ onMounted(async () => {
   //   console.log('mounted currentEpisodeIndex.value', currentEpisodeIndex.value);
 
   // set the default active slide to the first one
-  showSlide(slideIndex);
+  //   showSlide(slideIndex);
 });
 
 // watchEffect(() => {
@@ -44,16 +48,20 @@ const moveSlide = (moveStep) => {
   const ii = episodes.value
     .map((e, index) => e.id === Number(route.params.id) && index)
     .filter((e) => typeof e === 'number')[0];
-  let movedIndex = ii + moveStep;
-  if (movedIndex < 0) {
-    movedIndex = episodes.value.length + movedIndex;
-  } else if (movedIndex >= episodes.value.length) {
-    movedIndex = episodes.value.length - movedIndex;
-  }
 
-  console.log('before move', ii, moveStep, movedIndex, route.params.id);
-  //   showSlide((slideIndex += moveStep));
+  console.log('before move', slideIndex);
 
+  //     let movedIndex = ii + moveStep;
+  //     if (movedIndex < 0) {
+  //       movedIndex = episodes.value.length + movedIndex;
+  //     } else if (movedIndex >= episodes.value.length) {
+  //       movedIndex = episodes.value.length - movedIndex;
+  //     }
+
+  //   console.log('before move', ii, moveStep, movedIndex, route.params.id);
+
+  showSlide((slideIndex += moveStep));
+  //   showSlide(( += moveStep));
   //   console.log('history', history.state);
   //   console.log('route.params.id', route.params.id);
   // console.log('dd', episodes.value[0].id);
@@ -65,9 +73,9 @@ const moveSlide = (moveStep) => {
   //     force: true
   //   });
 
-  location.href = `/show/${route.path.split('/')[2]}/episode/${
-    episodes.value[movedIndex].id
-  }`;
+  //   location.href = `/show/${route.path.split('/')[2]}/episode/${
+  //     episodes.value[movedIndex].id
+  //   }`;
 
   // ${encodeURIComponent(episodes.value[movedIndex].id)}
 
@@ -77,7 +85,8 @@ const moveSlide = (moveStep) => {
   //     `/show/${route.path.split('/')[2]}/episode/
   //     `
   //   );
-  console.log('after move', ii, moveStep, movedIndex, route.params.id);
+  //   console.log('after move', ii, moveStep, movedIndex, route.params.id);
+  console.log('after move', slideIndex);
 };
 // change slide with the dots
 const currentSlide = (n) => {
