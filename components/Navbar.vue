@@ -4,17 +4,35 @@ export default {
   props: ['showName'],
   setup(props) {
     const name = ref('');
+    const navLink = ref(null);
     watchEffect(() => {
       name.value = props.showName;
     });
-    return { name };
+
+    const linkOptions = [
+      { name: 'Home', id: 'home' },
+      { name: 'Episodes', id: 'episodes' },
+      { name: 'Casts', id: 'casts' },
+      { name: 'Contact', id: 'contact' }
+    ];
+
+    const linkOnClick = (id) => {
+      navLink.value.forEach((e) => {
+        if (e.id === id) {
+          e.classList.add('dark:text-white');
+        } else {
+          e.classList.remove('dark:text-white');
+        }
+      });
+    };
+    return { name, linkOptions, navLink, linkOnClick };
   }
 };
 </script>
 
 <template>
   <nav
-    class="p-5 bg-gray-50 rounded border-gray-200 dark:bg-gray-800 dark:border-gray-700"
+    class="p-5 bg-gray-50 rounded border-gray-200 dark:bg-gray-800 dark:border-gray-700 sticky top-0"
   >
     <div class="container flex flex-wrap justify-between items-center mx-auto">
       <a href="#" class="flex items-center">
@@ -69,35 +87,17 @@ export default {
         <ul
           class="flex flex-col mt-4 bg-gray-50 rounded-lg md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-transparent dark:bg-gray-800 md:dark:bg-transparent dark:border-gray-700"
         >
-          <li>
+          <li v-for="(link, index) in linkOptions" :key="index">
             <a
-              href="#"
-              class="block py-2 pr-4 pl-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-white dark:bg-blue-600 md:dark:bg-transparent"
-              aria-current="page"
-              >Home</a
-            >
-          </li>
-          <li>
-            <a
-              href="#episodes"
+              :id="link.id"
+              :href="'#' + link.id"
+              ref="navLink"
               class="block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-              >Episodes</a
+              v-on:click="linkOnClick(link.id)"
+              >{{ link.name }}</a
             >
           </li>
-          <li>
-            <a
-              href="#casts"
-              class="block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-              >Casts</a
-            >
-          </li>
-          <li>
-            <a
-              href="#"
-              class="block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-              >Contact</a
-            >
-          </li>
+          <!-- :class="{ 'dark:text-white': isActiveLink }" -->
         </ul>
       </div>
     </div>
