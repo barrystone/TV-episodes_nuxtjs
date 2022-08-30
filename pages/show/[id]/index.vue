@@ -15,7 +15,7 @@ onMounted(async () => {
   const data = await res.json();
   showInfo.value = data;
   episodes.value = data._embedded.episodes;
-  // console.log('showInfo', showInfo);
+  console.log('showInfo', showInfo.value);
   // console.log('episodes', episodes);
 });
 </script>
