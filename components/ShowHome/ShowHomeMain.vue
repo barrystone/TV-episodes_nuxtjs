@@ -15,7 +15,7 @@ const props = defineProps<Props>();
 <template>
   <div class="flex justify-center items-center">
     <div
-      class="flex flex-col items-center bg-white rounded-lg border shadow-md md:flex-row md:max-w-xl dark:border-gray-700 dark:bg-gray-800 my-10"
+      class="flex flex-col items-center bg-white rounded-lg border shadow-md md:flex-row md:max-w-xl dark:border-gray-700 dark:bg-gray-800 my-5"
     >
       <img
         class="object-cover w-full h-96 rounded-t-lg md:h-auto md:w-80 md:rounded-none md:rounded-l-lg"
