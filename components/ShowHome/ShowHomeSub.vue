@@ -1,12 +1,15 @@
 <script lang="ts">
 export default {
   props: ['showInfo'],
-  setup() {}
+  setup() {
+    const tabId = ref('information-tab');
+    const selectTab = (id) => (tabId.value = id);
+    return { tabId, selectTab };
+  }
 };
 </script>
 
 <template>
-  <!-- <h1>ShowHomeSub props(showInfo.name): {{ showInfo.name }}</h1> -->
   <div
     class="w-full bg-white rounded-lg border shadow-md dark:bg-gray-800 dark:border-gray-700"
   >
@@ -16,7 +19,7 @@ export default {
         id="tabs"
         class="bg-gray-50 border-0 border-b border-gray-200 text-gray-900 sm:text-sm rounded-t-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
       >
-        <option>Infomation</option>
+        <option>Information</option>
         <option>Story</option>
         <option>Others</option>
       </select>
@@ -29,39 +32,47 @@ export default {
     >
       <li class="w-full">
         <button
-          id="stats-tab"
+          id="information-tab"
           data-tabs-target="#stats"
           type="button"
           role="tab"
           aria-controls="stats"
           aria-selected="true"
           class="inline-block p-4 w-full bg-gray-50 rounded-tl-lg hover:bg-gray-100 focus:outline-none dark:bg-gray-700 dark:hover:bg-gray-600"
+          @click="selectTab('information-tab')"
+          :class="
+            tabId === 'information-tab' ? 'bg-gray-100 dark:bg-gray-600' : ''
+          "
         >
-          Infomation
+          Information
         </button>
       </li>
       <li class="w-full">
         <button
-          id="about-tab"
+          id="story-tab"
           data-tabs-target="#about"
           type="button"
           role="tab"
           aria-controls="about"
           aria-selected="false"
           class="inline-block p-4 w-full bg-gray-50 hover:bg-gray-100 focus:outline-none dark:bg-gray-700 dark:hover:bg-gray-600"
+          @click="selectTab('story-tab')"
+          :class="tabId === 'story-tab' ? 'bg-gray-100 dark:bg-gray-600' : ''"
         >
           Story
         </button>
       </li>
       <li class="w-full">
         <button
-          id="faq-tab"
+          id="others-tab"
           data-tabs-target="#faq"
           type="button"
           role="tab"
           aria-controls="faq"
           aria-selected="false"
           class="inline-block p-4 w-full bg-gray-50 rounded-tr-lg hover:bg-gray-100 focus:outline-none dark:bg-gray-700 dark:hover:bg-gray-600"
+          @click="selectTab('others-tab')"
+          :class="tabId === 'others-tab' ? 'bg-gray-100 dark:bg-gray-600' : ''"
         >
           Others
         </button>
@@ -73,6 +84,7 @@ export default {
     >
       <div
         class="p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800"
+        :class="tabId === 'information-tab' ? '' : 'hidden'"
         id="stats"
         role="tabpanel"
         aria-labelledby="stats-tab"
@@ -125,7 +137,8 @@ export default {
         </dl>
       </div>
       <div
-        class="hidden p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800"
+        class="p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800"
+        :class="tabId === 'story-tab' ? '' : 'hidden'"
         id="about"
         role="tabpanel"
         aria-labelledby="about-tab"
@@ -208,7 +221,8 @@ export default {
         </ul>
       </div>
       <div
-        class="hidden p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800"
+        class="p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800"
+        :class="tabId === 'others-tab' ? '' : 'hidden'"
         id="faq"
         role="tabpanel"
         aria-labelledby="faq-tab"
