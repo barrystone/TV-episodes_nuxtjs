@@ -42,6 +42,17 @@ onMounted(async () => {
 
   findTheEpisode();
   slideIndex = episodes.value.indexOf(theEpisode.value) + 1;
+
+  // Press right or left keyboard move to next episode.
+  addEventListener('keyup', (e) => {
+    if (e.key === 'ArrowRight') {
+      moveSlide(1);
+    } else if (e.key === 'ArrowLeft') {
+      moveSlide(-1);
+    } else {
+      return;
+    }
+  });
 });
 
 // change slide with the prev/next button
