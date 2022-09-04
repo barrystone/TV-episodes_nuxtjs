@@ -7,5 +7,10 @@ export default defineNuxtConfig({
 
   publicRuntimeConfig: {
     apiBase: process.env.API_BASE
+  },
+  // Github pages
+  target: 'static',
+  router: {
+    base: '/TV-episodes_nuxtjs/'
   }
 });
