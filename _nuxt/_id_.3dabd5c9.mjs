@@ -1,0 +1,1 @@
+import{_ as t}from"./TVLists.70eed170.mjs";import{e as r,o as c,c as n}from"./entry.9b3788d3.mjs";import"./Header.379a81aa.mjs";const s={};function _(e,a){const o=t;return c(),n(o,{searchedText:e.$route.params.id},null,8,["searchedText"])}const d=r(s,[["render",_]]);export{d as default};

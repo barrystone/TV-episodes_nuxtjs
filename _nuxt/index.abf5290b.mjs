@@ -1,0 +1,1 @@
+import{_ as o}from"./TVLists.70eed170.mjs";import{a as n,o as a,c as r,u as s}from"./entry.9b3788d3.mjs";import"./Header.379a81aa.mjs";const l=n({__name:"index",setup(c){let e="breaking";return(_,m)=>{const t=o;return a(),r(t,{searchedText:s(e),isHome:!0},null,8,["searchedText"])}}});export{l as default};
