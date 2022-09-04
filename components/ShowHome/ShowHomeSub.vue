@@ -247,7 +247,7 @@ export default {
               class="py-5 font-light border-b border-gray-200 dark:border-gray-700"
             >
               <a
-                :href="showInfo.officialSite"
+                :href="showInfo.url"
                 target="_blank"
                 class="text-blue-600 dark:text-blue-500 hover:underline"
               >
